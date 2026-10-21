@@ -11,7 +11,7 @@ Install
 Install via composer
 
 ```
-composer require sj-distributor/daotalent-service-single
+composer require daotalent/daotalent-service-single
 ```
 
 Generate config file
