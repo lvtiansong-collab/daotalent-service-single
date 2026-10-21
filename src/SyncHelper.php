@@ -44,6 +44,12 @@ class SyncHelper
             if ($dbColumn == 'company_name') {
                 return [$dbColumn => $unitNames[$employee['company_id']] ?? null];
             }
+            if ($dbColumn == 'user_name') {
+                // 源 username 常为空，回退取 nickname，避免 user_name 落 null
+                return [$dbColumn => trim((string)($employee['username'] ?? '')) !== ''
+                    ? $employee['username']
+                    : ($employee['nickname'] ?? null)];
+            }
             return [$dbColumn => $employee[$sourceField] ?? null];
         })->toArray();
     }
