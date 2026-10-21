@@ -1,0 +1,32 @@
+{
+    "name": "sj-distributor/daotalent-service-single",
+    "description": "daoTaLent HR data synchronization service via RabbitMQ",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "daoTaLent",
+        "rabbitmq",
+        "hr",
+        "synchronization"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "laravel/framework": "^10.0|^11.0",
+        "php-amqplib/php-amqplib": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wiltechsteam\\DaotalentServiceSingle\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wiltechsteam\\DaotalentServiceSingle\\DaotalentServiceSingleProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

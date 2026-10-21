@@ -1,0 +1,10 @@
+<?php
+
+namespace {{namespace}};
+
+use Wiltechsteam\DaotalentServiceSingle\Models\Unit as UnitModel;
+
+class Unit extends UnitModel
+{
+
+}
