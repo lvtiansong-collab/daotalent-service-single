@@ -44,12 +44,6 @@ class SyncHelper
             if ($dbColumn == 'company_name') {
                 return [$dbColumn => $unitNames[$employee['company_id']] ?? null];
             }
-            if ($dbColumn == 'user_name') {
-                // 源 username 常为空，回退取 nickname，避免 user_name 落 null
-                return [$dbColumn => trim((string)($employee['username'] ?? '')) !== ''
-                    ? $employee['username']
-                    : ($employee['nickname'] ?? null)];
-            }
             return [$dbColumn => $employee[$sourceField] ?? null];
         })->toArray();
     }
@@ -66,7 +60,11 @@ class SyncHelper
     {
         DB::transaction(function () use ($modelClass, $records, $updateColumns) {
             foreach ($records->chunk(500) as $chunk) {
-                $modelClass::query()->upsert($chunk->toArray(), ['id'], $updateColumns);
+                $rows = $chunk->map(function ($row) use ($modelClass) {
+                    return (new $modelClass)->fill($row)->getAttributes();
+                })->values()->toArray();
+
+                $modelClass::query()->upsert($rows, ['id'], $updateColumns);
             }
         });
     }
@@ -92,7 +90,13 @@ class SyncHelper
      */
     public static function updateById(string $modelClass, array $data): void
     {
-        $modelClass::query()->where('id', $data['id'])->update($data);
+        $record = $modelClass::query()->find($data['id']);
+
+        if (empty($record)) {
+            return;
+        }
+
+        $record->fill($data)->save();
     }
 
     /**
